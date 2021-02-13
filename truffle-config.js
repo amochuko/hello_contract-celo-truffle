@@ -19,6 +19,16 @@ const getAccount = require("./getAccount").getAccount;
 async function awaitWrapper() {
   let account = await getAccount();
   kit.connection.addAccount(account.privateKey);
+
+  // deploy with Node.js
+  const HelloWorld = require("./build/contracts/HelloWorld.json");
+  let txn = await kit.connection.sendTransaction({
+    from: account.address,
+    data: HelloWorld.bytecode,
+  });
+
+  const res = await txn.waitReceipt()
+  console.log(res)
 }
 awaitWrapper();
 
